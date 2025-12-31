@@ -20,7 +20,7 @@ app.post("/send-csv-emails", upload.single("recipients"), async (req, res) => {
     .on("end", async () => {
       fs.unlinkSync(req.file.path); // remove uploaded CSV file
 
-      const emailSubject = "Message from the Krishworks team";
+      const emailSubject = "A note from the Krishworks team";
       const emailBody = fs.readFileSync(
         path.join(__dirname, "index.html"),
         "utf8"
@@ -46,10 +46,13 @@ app.post("/send-csv-emails", upload.single("recipients"), async (req, res) => {
               name: process.env.SENDER_NAME,
             },
             subject: emailSubject,
-            html: emailBody.replace("{{name}}", row.name || ""), // personalize if name exists
+            html: emailBody.replace(
+                    "{{name}}",
+                    row.name
+                  ),
             mailSettings: {
               subscription_tracking: {
-                enable: false,
+                enable: true,
               },
             },
           };
